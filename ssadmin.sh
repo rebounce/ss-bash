@@ -614,7 +614,7 @@ fi
 case $1 in
     add )
         shift
-        add_user $1 $2 $3
+        add_user $1 $2 $3 $4
         ;;
     del )
         shift
@@ -630,7 +630,7 @@ case $1 in
         ;;
     change )
         shift
-        change_user $1 $2 $3
+        change_user $1 $2 $3 $4
         ;;
     cpw )
         shift
