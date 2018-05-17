@@ -279,6 +279,41 @@ check_traffic_against_limits () {
         fi
     done
 }
+
+check_time_expire(){
+#根据用户是否在有效起
+    currentdate=`date +%Y%m%d`
+    ports_2ban=`awk -v cdate="$currentdate" '
+    BEGIN {
+        i=1;
+    }
+    {
+        if(FILENAME=="'$USER_FILE'"){
+            if($0 !~ /^#|^\s*$/){
+                port=$1;
+                user[i++]=port;
+                limit=$4;
+                limits[port]=limit
+            }
+        }
+    }
+    END {
+        for(j=1;j<i;j++) {
+            port=user[j];
+            if(limits[port]==cdate) print port;
+        }
+    }' $USER_FILE ` 
+    for p in $ports_2ban; do
+        if grep -q $p $PORTS_ALREADY_BAN; then
+            continue;
+        else 
+            del_rules $p
+            add_reject_rules $p
+            echo $p >> $PORTS_ALREADY_BAN
+        fi
+    done
+}
+
 get_traffic_from_iptables () {
         echo "$(iptables -nvx -L $SS_IN_RULES)" "$(iptables -nvx -L $SS_OUT_RULES)" |
         sed -nr '/ [sd]pt:[0-9]{1,5}$/ s/[sd]pt:([0-9]{1,5})/\1/p' |

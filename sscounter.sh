@@ -55,5 +55,7 @@ while true; do
 # 验证流量是否超过预设值
     calc_remaining
     check_traffic_against_limits
+# 验证用户是否在有效去	
+	check_time_expire
     sleep $INTERVEL 
 done

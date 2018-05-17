@@ -204,7 +204,7 @@ check_port_range () {
     fi
 }
 add_user () {
-    if [ "$#" -ne 3 ]; then
+    if [ "$#" -ne 4 ]; then
         wrong_para_prompt;
         return 1
     fi
@@ -218,11 +218,12 @@ add_user () {
     PWORD=$2
     TLIMIT=$3
     TLIMIT=`bytes2gb $TLIMIT`
+	EXPIRETIME=$4
     if [ ! -e $USER_FILE ]; then
         echo "\
 # 以空格、制表符分隔
-# 端口 密码 流量限制
-# 2345 abcde 1000000" > $USER_FILE;
+# 端口 密码 流量限制  有效期
+# 2345 abcde 1000000   20180919" > $USER_FILE;
     fi
     cat $USER_FILE |
     awk '
@@ -231,7 +232,7 @@ add_user () {
     }'
     if [ $? -eq 0 ]; then
         echo "\
-$PORT $PWORD $TLIMIT" >> $USER_FILE;
+$PORT $PWORD $TLIMIT $EXPIRETIME" >> $USER_FILE;
     else
         echo "用户已存在!"
         return 1
@@ -277,7 +278,7 @@ del_user () {
 }
 
 change_user () {
-    if [ "$#" -ne 3 ]; then
+    if [ "$#" -ne 4 ]; then
         wrong_para_prompt;
         return 1
     fi
@@ -291,6 +292,7 @@ change_user () {
     PWORD=$2
     TLIMIT=$3
     TLIMIT=`bytes2gb $TLIMIT`
+	EXPIRETIME=$4
     if [ ! -e $USER_FILE ]; then
         echo "目前还无用户，请先添加用户" 
         return 1
@@ -300,7 +302,7 @@ change_user () {
         awk '
         {
             if($1=='$PORT') {
-                printf("'$PORT' '$PWORD' '$TLIMIT'\n");
+                printf("'$PORT' '$PWORD' '$TLIMIT' '$EXPIRETIME'\n");
             } else {
                 print $0
             }
