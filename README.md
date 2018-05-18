@@ -1,4 +1,4 @@
-ss-bash
+﻿ss-bash
 =======
 
 Shadowsocks流量管理脚本
@@ -13,3 +13,7 @@ Shadowsocks流量管理脚本
 
 
 [User Manual]:    https://github.com/hellofwy/ss-bash/wiki
+
+
+定时清空流量任务
+0 0 1 * * /bin/sh /root/ss-bash/ssadmin.sh reset_all_used >/root/temp.log 
