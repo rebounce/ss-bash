@@ -17,3 +17,5 @@ Shadowsocks流量管理脚本
 
 定时清空流量任务
 0 0 1 * * /bin/sh /root/ss-bash/ssadmin.sh reset_all_used >/root/temp.log 
+
+有疑问可以联系：https://t.me/powerfuljet
